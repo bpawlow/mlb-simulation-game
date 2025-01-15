@@ -1,22 +1,35 @@
 # import packages
 import pandas as pd
 
-def process_data(hitting_data_file, player_positions_file, output_file):
+"""
+Python function for loading and processing csv data from multiple sources. 
+(This is being replaced by data/hitting-data-cleaning.ipynb Jupyter Notebook for now)
+WORK IN PROGRESS - NOT RELEASED
+"""
+
+
+def process_data(players_file, hitting_data_file, fielding_file, output_file):
 
     #load data from csv
+    player_names_df = pd.read_csv(players_file, encoding='latin-1', usecols=['playerID', 'nameFirst', 'nameLast'])
+    fielding_df = pd.read_csv(fielding_file)
     hitting_df = pd.read_csv(hitting_data_file)
-    positions_df = pd.read_csv(player_positions_file)
     
     #clean player position data
-    positions_df = positions_df[['name_fielder', 'fld_name_display_club', 'position']]
-    positions_df = positions_df.rename(columns={'fld_name_display_club':'team'})
+    fielding_df = fielding_df.loc[fielding_df['position'] != 'P', ['playerID', 'position']]
+    player_names_df = player_names_df[['playerID', 'nameFirst', 'nameLast']]
+
+    # Merge and create name column in one step, selecting only needed columns
+    players_df = (fielding_df.merge(player_names_df, 'left', 'playerID')
+                 .assign(name=lambda x: x['nameLast'] + ', ' + x['nameFirst'])
+                 [['name', 'position']]
+                 .drop_duplicates())
     
     #match name columns
     hitting_df = hitting_df.rename(columns={'last_name, first_name': 'name'})
-    positions_df = positions_df.rename(columns={'name_fielder': 'name'})
 
     #merge datasets
-    final_df = hitting_df.merge(positions_df,'inner','name')
+    final_df = hitting_df.merge(players_df,'inner','name')
 
     #reorder columns
     hitting_columns = list(hitting_df.columns)
@@ -26,10 +39,10 @@ def process_data(hitting_data_file, player_positions_file, output_file):
     
     #Remove duplicate players with slightly different positions (combine positions into one array)
 
-    final_df = final_df.groupby("player_id").agg({
-        "position": list,             # Combine the 'position' column into a list
-        **{col: "first" for col in final_df.columns if col not in ["player_id", "position"]}  # Take the first value for all other columns
-    }).reset_index()
+    final_df = final_df.groupby(["player_id", "year"], as_index=False).agg({
+        "position": list,  # Combine the 'position' column into a list
+        **{col: "first" for col in final_df.columns if col not in ["player_id", "year", "position"]}  # Take the first value for all other columns
+    })
 
     final_df["position"] = final_df["position"].apply(lambda x: list(set(x)))
 

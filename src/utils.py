@@ -35,7 +35,7 @@ def create_test_teams_matchup(players_df):
         
         #Add DH to lineup if needed
         if len(team_players) < 9:
-            for i in range(9-len(team_players)):
+            for j in range(9-len(team_players)):
                 dh_player = available_players.iloc[0]
                 team_players.append(dh_player)
                 # Remove selected player from available pool
@@ -44,7 +44,7 @@ def create_test_teams_matchup(players_df):
         # Convert team_players list to DataFrame
         team_df = pd.DataFrame(team_players)
         # Create lineup and team object
-        lineup = create_player_objects(team_names[i], team_df)
+        lineup = create_player_objects(team_names[i],team_df)
         teams.append(Team(team_names[i], lineup))
     
     return teams
