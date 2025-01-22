@@ -22,3 +22,4 @@ if __name__ == "__main__":
     
     print('Team 1: ', team1)
     print('Team 2: ', team2)
+    print(result)

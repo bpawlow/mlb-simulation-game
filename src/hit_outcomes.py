@@ -9,7 +9,6 @@ class HitType(Enum):
     TRIPLE = auto()
     HOME_RUN = auto()
     ERROR = auto()
-    SACRIFICE = auto()
     WALK = auto()
     HBP = auto()
 
@@ -27,7 +26,7 @@ class OutType(Enum):
     
     
     
-# Define probabilities for each outcome
+# Define default probabilities for each outcome
 outcome_probabilities = {
     'hit': {
         HitType.SHORT_SINGLE: 0.45,
@@ -38,7 +37,6 @@ outcome_probabilities = {
         HitType.TRIPLE: 0.02,
         HitType.HOME_RUN: 0.05,
         HitType.ERROR: 0.01,
-        HitType.SACRIFICE: 0.01,
         HitType.WALK: 0.01,
         HitType.HBP: 0.01
     },

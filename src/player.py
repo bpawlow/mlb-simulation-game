@@ -13,7 +13,6 @@ class PlayerStats:
         self.home_runs = stats['home_run'] if 'home_run' in stats else "N/A"
         self.strikeouts = stats['strikeout'] if 'strikeout' in stats else "N/A"
         self.walks = stats['walk'] if 'walk' in stats else "N/A"
-        self.GDP = stats['b_gnd_into_dp'] if 'b_gnd_into_dp' in stats else "N/A"
         self.HBP = stats['home_run'] if 'home_run' in stats else "N/A"
         self.FO = stats['b_out_fly'] if 'b_out_fly' in stats else "N/A"
         self.GO = stats['b_out_ground'] if 'b_out_ground' in stats else "N/A"
@@ -25,18 +24,16 @@ class PlayerStats:
         return f"""PlayerStats(
             obp={self.on_base_pct}, 
             slg={self.slugging_pct})"""
-      
-      
-    # EXAMPLE      
+       
     @property
-    def on_base_pct(self):
+    def on_base_pct(self) -> float:
         """Calculate On-base Percentage"""
         if self.PA == 0:
             return 0.0
         return (self.hits + self.walks + self.HBP) / self.PA
 
     @property
-    def slugging_pct(self):
+    def slugging_pct(self) -> float:
         """Calculate Slugging Percentage"""
         if self.AB == 0:
             return 0.0

@@ -5,14 +5,20 @@ Helper functions such as data loading/modeling, randomization, or utility method
 import pandas as pd
 from src.team import Team
 from src.player import Player, PlayerStats
+from typing import List
 
-# Load processed player data
-def load_player_data(file_path): 
-    pass 
+def create_test_teams_matchup(players_df: pd.DataFrame) -> List[Team]:
+    """Create two test teams with balanced lineups from a pool of players.
     
-
-# Create 2 example teams to play each other
-def create_test_teams_matchup(players_df):
+    Creates two teams by selecting players from the provided DataFrame, ensuring each team
+    has players for each position and filling remaining spots with designated hitters.
+    
+    Args:
+        players_df (pandas.DataFrame): DataFrame containing available players and their stats
+        
+    Returns:
+        tuple: A tuple containing two Team objects (team1, team2) ready for simulation
+    """
     # Initialize empty teams list
     teams = []
     team_names = ['Team A', 'Team B']
@@ -44,28 +50,42 @@ def create_test_teams_matchup(players_df):
         # Convert team_players list to DataFrame
         team_df = pd.DataFrame(team_players)
         # Create lineup and team object
-        lineup = create_player_objects(team_names[i],team_df)
+        lineup = create_player_objects(team_df)
         teams.append(Team(team_names[i], lineup))
     
     return teams
 
-      
-# Create Team objects from processed player data
-def create_team_objects(players_df):
-     # Group players by team
+
+def create_team_objects(players_df: pd.DataFrame) -> List[Team]:
+    """Create Team objects from processed player data, grouped by team.
+    
+    Args:
+        players_df (pandas.DataFrame): DataFrame containing player data with team assignments
+        
+    Returns:
+        dict: Dictionary mapping team names to Team objects containing their lineups
+    """
+    # Group players by team
     teams = {}
     
     for team_name, team_players in players_df.groupby('team'):
-        lineup = create_player_objects(team_name,team_players)
+        lineup = create_player_objects(team_players)
         # Create Team object with lineup
         teams[team_name] = Team(team_name, lineup)
         
     return teams
-    
 
-# Create Player objects from processed player data
-def create_player_objects(team_name, team_players):
+
+def create_player_objects(team_players: pd.DataFrame) -> List[Player]:
+    """Create Player objects from processed player data for a specific team.
     
+    Args:
+        team_name (str): Name of the team these players belong to
+        team_players (pandas.DataFrame): DataFrame containing player data for a single team
+        
+    Returns:
+        list: List of Player objects representing the team's lineup
+    """
     # Convert each player row into a dict of stats
     lineup = []
     for _, player in team_players.iterrows():
@@ -85,5 +105,14 @@ def create_player_objects(team_name, team_players):
         lineup.append(new_player)
         
     return lineup
-            
-       
+
+def load_player_data(file_path: str):
+    """Load processed player data from a CSV file.
+    
+    Args:
+        file_path (str): Path to the CSV file containing player data
+        
+    Returns:
+        pandas.DataFrame: DataFrame containing the loaded player data
+    """
+    pass
