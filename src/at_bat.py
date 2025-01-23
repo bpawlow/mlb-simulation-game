@@ -6,7 +6,7 @@ import random
 from hit_outcomes import HitType, OutType 
 from typing import List
 
-def simulate_at_bat(player, outcome_probabilities) -> HitType | OutType:
+def simulate_at_bat(player) -> HitType | OutType:
     roll = random.random()
     
     # Check for walk or HBP first
