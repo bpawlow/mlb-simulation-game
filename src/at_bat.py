@@ -3,7 +3,7 @@ Logic to simulate the outcome of an at-bat, given player statistics.
 """
 
 import random
-from hit_outcomes import HitType, OutType 
+from src.hit_outcomes import HitType, OutType 
 from typing import List
 
 def simulate_at_bat(player) -> HitType | OutType:
@@ -37,13 +37,10 @@ def simulate_at_bat(player) -> HitType | OutType:
         OutType.GROUND_OUT: player.stats.GO / player.stats.PA,
         OutType.POP_OUT: player.stats.PO / player.stats.PA,
         OutType.LINE_OUT: player.stats.LO / player.stats.PA,
-        OutType.FLY_OUT: player.stats.FO / player.stats.PA,
-        OutType.GIDP: player.stats.GDP / player.stats.PA,
-        OutType.LDIF: player.stats.LO / player.stats.PA,
-        OutType.SHORT_FLY: player.stats.PO / player.stats.PA,
-        # Split remaining outs between medium and long flies
-        OutType.MEDIUM_FLY: (player.stats.FO * 0.3) / player.stats.PA,
-        OutType.LONG_FLY: (player.stats.FO * 0.2) / player.stats.PA
+        # Split remaining outs between short, medium, and long fly balls
+        OutType.SHORT_FLY: (player.stats.FO * 0.2) / player.stats.PA,
+        OutType.MEDIUM_FLY: (player.stats.FO * 0.5) / player.stats.PA,
+        OutType.LONG_FLY: (player.stats.FO * 0.3) / player.stats.PA
     }
     return weighted_random_choice(out_distribution)
 

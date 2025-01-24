@@ -2,15 +2,15 @@
 Logic for base running, including runner advancement and scoring.
 """
 
-from hit_outcomes import HitType, OutType
+from src.hit_outcomes import HitType, OutType
+from random import random
 
 class BaseState:
     def __init__(self):
         self.bases = [False, False, False]  # First, Second, Third
         self.runners_on_base = sum(1 for base in self.bases if base)
         self.runs_scored = 0
-        self.inning = 1
-        self.is_top_inning = True  # True for top of inning, False for bottom
+        self.was_double_play = False
         
     def count_scored_baserunners(self, start_base: int = 0) -> int:
         """Count number of runners from a given base position onwards.
@@ -33,11 +33,12 @@ class BaseState:
             int: Number of runs scored on this play
             
         The function handles all types of hits (singles, doubles, triples, home runs) 
-        and outs (fly balls, ground outs, etc) according to standard baseball rules.
+        and outs (fly balls, ground outs, etc.) according to standard baseball rules.
         For hits, runners advance the appropriate number of bases based on the hit type.
         For outs, runners may advance on sacrifice flies or force plays.
         """
         runs = 0
+        self.was_double_play = False  # Reset the flag at the start of each play
         
         if isinstance(bat_result, HitType):
             # Handle hits
@@ -71,7 +72,7 @@ class BaseState:
                 runs = self.count_scored_baserunners(1)
                 self.bases = [True, self.bases[0], self.bases[1]]
                 
-            elif bat_result == HitType.SHORT_SINGLE | HitType.ERROR:
+            elif bat_result in (HitType.SHORT_SINGLE, HitType.ERROR):
                 # Advance all runners one base
                 runs = self.count_scored_baserunners(2)
                 self.bases = [True, self.bases[0], self.bases[1]]
@@ -103,21 +104,34 @@ class BaseState:
                     self.bases[2] = True
                     
             elif bat_result == OutType.GROUND_OUT:
-                # Advance runners one base if forced, except batter is out
-                if self.bases[2]:
-                    runs += 1
-                self.bases[2] = self.bases[1]
-                self.bases[1] = self.bases[0]
-                self.bases[0] = False
-                
-            elif bat_result == OutType.GIDP and outs < 2:
-                # Double play - get force out at second and batter out at first
-                if self.bases[0]:
-                    self.bases[0] = False
-                    if self.bases[2]:
+                # Handle ground out differently based on base state
+                if self.bases[0]:  # Runner on first
+                    # 50% chance of double play if less than 2 outs
+                    if outs < 2 and random() < 0.5:
+                        self.was_double_play = True # Set the flag
+                        # Double play - force at second, batter out at first
+                        self.bases[0] = False
+                        if self.bases[2]:  # Runner on third scores
+                            runs += 1
+                        self.bases[2] = self.bases[1]
+                        self.bases[1] = False
+                    else:
+                        # Regular force out - advance all runners one base
+                        if self.bases[2]:
+                            runs += 1
+                        self.bases[2] = self.bases[1]
+                        self.bases[1] = self.bases[0]
+                        self.bases[0] = False
+                else:
+                    # No runner on first - regular ground out
+                    if self.bases[2]:  # Runner on third scores
                         runs += 1
-                    self.bases[2] = self.bases[1]
-                    self.bases[1] = False
-        
+                    if self.bases[1]:  # Runner on second advances to third
+                        self.bases[2] = True
+                        self.bases[1] = False
+                    self.bases[0] = False
+                
         self.runs_scored += runs
         return runs
+    def __repr__(self):
+        return f"Bases: {self.bases}, Runs: {self.runs}"

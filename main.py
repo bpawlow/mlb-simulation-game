@@ -2,7 +2,7 @@
 CLI Interface to run a simulated MLB game. 
 """
 
-from src.simulation import simulate_game
+from src.game import Game
 from data.process_data import process_data
 from src.utils import create_test_teams_matchup
 import pandas as pd
@@ -17,9 +17,6 @@ if __name__ == "__main__":
     # Create Team objects from processed player data
     # teams = create_team_objects(players_df)
     
-    # Run the simulation
-    result = simulate_game(team1, team2)
-    
-    print('Team 1: ', team1)
-    print('Team 2: ', team2)
-    print(result)
+    # Create game and run the simulation
+    game = Game(team1, team2)
+    result = game.play()
