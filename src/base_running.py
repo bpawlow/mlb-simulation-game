@@ -86,15 +86,15 @@ class BaseState:
                         self.bases[i] = True
                 self.bases[0] = True
                 
-        elif isinstance(bat_result, OutType):
+        elif isinstance(bat_result, OutType) and outs < 2:
             # Handle outs
-            if bat_result == OutType.MEDIUM_FLY and outs < 2:
+            if bat_result == OutType.MEDIUM_FLY:
                 # Score from third on sac fly
                 if self.bases[2]:
                     runs += 1
                     self.bases[2] = False
                     
-            elif bat_result == OutType.LONG_FLY and outs < 2:
+            elif bat_result == OutType.LONG_FLY:
                 # Advance runner from second or third
                 if self.bases[2]:
                     runs += 1

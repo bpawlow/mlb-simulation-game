@@ -2,7 +2,7 @@
 Contains the main logic for the Monte Carlo simulation (game simulation, inning simulation, player stats processing).
 """
 
-from .team import Team
+from src.team import Team
 from .game import simulate_game
 
 def monte_carlo_simulation(visitor: Team, home: Team, numGames: int):

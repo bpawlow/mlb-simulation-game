@@ -105,14 +105,3 @@ def create_player_objects(team_players: pd.DataFrame) -> List[Player]:
         lineup.append(new_player)
         
     return lineup
-
-def load_player_data(file_path: str):
-    """Load processed player data from a CSV file.
-    
-    Args:
-        file_path (str): Path to the CSV file containing player data
-        
-    Returns:
-        pandas.DataFrame: DataFrame containing the loaded player data
-    """
-    pass

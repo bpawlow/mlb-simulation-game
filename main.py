@@ -2,21 +2,19 @@
 CLI Interface to run a simulated MLB game. 
 """
 
+from src.database.setup_db import setup_database
 from src.game import Game
-from data.process_data import process_data
-from src.utils import create_test_teams_matchup
-import pandas as pd
+from src.team import Team
 
 if __name__ == "__main__":
-    # Load teams
-    players_df = pd.read_csv('data/players.csv')
+    # Initialize and populate database
+    setup_database()
     
-    # Create two teams to simulate a game (Example)
-    team1, team2 = create_test_teams_matchup(players_df)
+    # Create teams using database data
+    team1 = Team("CHN")  # Cubs
+    team2 = Team("STL")  # Cardinals
     
-    # Create Team objects from processed player data
-    # teams = create_team_objects(players_df)
-    
-    # Create game and run the simulation
+    # Create game and run simulation
     game = Game(team1, team2)
     result = game.play()
+    print(result)

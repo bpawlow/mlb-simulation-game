@@ -3,7 +3,7 @@ Unit tests for Player class.
 """
 
 import unittest
-from src.player import Player
+from models.player import Player
 
 class TestPlayer(unittest.TestCase):
     def test_player_stats(self):

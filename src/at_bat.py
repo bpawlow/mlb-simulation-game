@@ -22,7 +22,7 @@ def simulate_at_bat(player) -> HitType | OutType:
         hit_distribution = {
             HitType.HOME_RUN: player.stats.home_runs / total_hits,
             HitType.TRIPLE: player.stats.triples / total_hits,
-            HitType.ERROR: player.stats.ROE / player.stats.PA,
+            HitType.ERROR: 0.02, #estimating error frequency to be about 2% of the time
             HitType.LONG_DOUBLE: (player.stats.doubles * 0.2) / total_hits,  # Estimating 20% are long doubles
             HitType.SHORT_DOUBLE: (player.stats.doubles * 0.8) / total_hits, # Estimating 80% are short doubles
             HitType.LONG_SINGLE: (player.stats.singles * 0.3) / total_hits,  # Estimating 30% are long singles

@@ -1,25 +1,33 @@
 from enum import Enum, auto
 
 class HitType(Enum):
-    SHORT_SINGLE = auto() #advances one base
-    MEDIUM_SINGLE = auto() #scores from 2nd
-    LONG_SINGLE = auto() #advances 2 bases
-    SHORT_DOUBLE = auto() #runners advance 2 bases
-    LONG_DOUBLE = auto() #scores a runner from 1st
-    TRIPLE = auto()
-    HOME_RUN = auto()
-    ERROR = auto()
-    WALK = auto()
-    HBP = auto()
-
+    """Enum representing different types of hits and their base-running outcomes.
+    
+    Each enum value represents a different type of hit or positive batting outcome,
+    with specific rules for how baserunners advance.
+    """
+    SHORT_SINGLE = auto()  # Batter to first, runners advance one base
+    MEDIUM_SINGLE = auto() # Batter to first, scores from second, first to second
+    LONG_SINGLE = auto()   # Batter to first, all runners advance two bases
+    SHORT_DOUBLE = auto()  # Batter to second, runners advance two bases
+    LONG_DOUBLE = auto()   # Batter to second, scores runner from first
+    TRIPLE = auto()        # Batter to third, all runners score
+    HOME_RUN = auto()      # Batter and all runners score
+    ERROR = auto()         # Batter reaches 1st on error, runners advance one base
+    WALK = auto()          # Batter to first, runners advance if forced
+    HBP = auto()          # Hit by pitch, same rules as walk
 
 
 class OutType(Enum):
-    STRIKE_OUT = auto()
-    FLY_OUT = auto()
-    GROUND_OUT = auto() # force out for a runner if possible. 2nd -> 3rd and 3rd -> Home advances.
-    POP_OUT = auto() #pop out
-    LINE_OUT = auto() #line out
-    SHORT_FLY = auto() #does not advance any runners 
-    MEDIUM_FLY = auto() #(if fewers than 2 outs) scores a runner from third
-    LONG_FLY = auto() #(if fewer than 2 outs) advances a runner on second or third one base
+    """Enum representing different types of outs and their base-running outcomes.
+    
+    Each enum value represents a different way a batter can make an out,
+    with specific rules for how baserunners may advance with less than 2 outs.
+    """
+    STRIKE_OUT = auto()    # Batter strikes out, no runner advancement
+    GROUND_OUT = auto()    # Ground out with force play potential and runner advancement
+    POP_OUT = auto()       # Infield pop out, no runner advancement
+    LINE_OUT = auto()      # Line out, no runner advancement
+    SHORT_FLY = auto()     # Short fly out, no runner advancement
+    MEDIUM_FLY = auto()    # Medium fly out, runner on third may score
+    LONG_FLY = auto()      # Deep fly out, runners on second/third may advance
