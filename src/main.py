@@ -2,9 +2,9 @@
 CLI Interface to run a simulated MLB game. 
 """
 
-from src.database.setup_db import setup_database
-from src.game import Game
-from src.team import Team
+from backend.database.setup_db import setup_database
+from backend.game.game import Game
+from backend.classes.team import Team
 
 if __name__ == "__main__":
     # Initialize and populate database

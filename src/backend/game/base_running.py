@@ -2,7 +2,7 @@
 Logic for base running, including runner advancement and scoring.
 """
 
-from src.hit_outcomes import HitType, OutType
+from hit_outcomes import HitType, OutType
 from random import random
 
 class BaseState:
@@ -134,4 +134,4 @@ class BaseState:
         self.runs_scored += runs
         return runs
     def __repr__(self):
-        return f"Bases: {self.bases}, Runs: {self.runs}"
+        return f"Bases: {self.bases}, Runs: {self.runs_scored}"

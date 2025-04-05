@@ -2,12 +2,12 @@
 Define a Team class that holds information about team members, lineup, etc
 """
 
-from .database.session import Session
-from .models.team_model import TeamModel
+from ..database.session import Session
+from ..models.team_model import TeamModel
 from .player import Player
 
 class Team:
-    def __init__(self, name, lineup=None):
+    def __init__(self, name: str, lineup: list[Player] | None = None):
         self.name = name
         self.db = Session()
         

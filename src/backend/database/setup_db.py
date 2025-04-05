@@ -5,6 +5,7 @@ from ..models.player_model import PlayerModel
 import pandas as pd
 
 def setup_database():
+    
     # Initialize database schema
     init_db()
     
@@ -12,6 +13,11 @@ def setup_database():
     db = Session()
     
     try:
+        # First clear existing data
+        db.query(PlayerModel).delete()
+        db.query(TeamModel).delete()
+        db.commit()
+        
         # Load your existing players CSV data
         players_df = pd.read_csv('data/players.csv')
         
@@ -27,7 +33,7 @@ def setup_database():
                 player = PlayerModel(
                     player_id=player_data['player_id'],
                     name=player_data['name'],
-                    positions=','.join(player_data['position']),
+                    positions=player_data['position'],
                     team_id=team.id,
                     year=player_data['year'],
                     age=player_data['player_age'],
@@ -56,4 +62,4 @@ def setup_database():
         print(f"Error setting up database: {e}")
         db.rollback()
     finally:
-        db.close() 
+        db.close()

@@ -1,9 +1,9 @@
 """
 Simulate a game between two teams of the Teams class.
 """
-from src.inning import Inning
-from src.team import Team
-from src.at_bat import simulate_at_bat
+from inning import Inning
+from ..classes.team import Team
+from at_bat import simulate_at_bat
 from typing import Literal
 
 class Game:

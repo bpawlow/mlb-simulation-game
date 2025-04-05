@@ -3,10 +3,11 @@ Logic to simulate the outcome of an at-bat, given player statistics.
 """
 
 import random
-from src.hit_outcomes import HitType, OutType 
-from typing import List
+from hit_outcomes import HitType, OutType 
+from ..classes.player import Player
+from typing import Dict
 
-def simulate_at_bat(player) -> HitType | OutType:
+def simulate_at_bat(player: Player) -> HitType | OutType:
     roll = random.random()
     
     # Check for walk or HBP first
@@ -44,7 +45,7 @@ def simulate_at_bat(player) -> HitType | OutType:
     }
     return weighted_random_choice(out_distribution)
 
-def weighted_random_choice(distribution: List[HitType] | List[OutType]):
+def weighted_random_choice(distribution: Dict[HitType, float] | Dict[OutType, float]):
     """Helper function to choose from a weighted distribution"""
     
      # Calculate total probability

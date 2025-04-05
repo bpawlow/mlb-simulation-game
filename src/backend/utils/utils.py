@@ -3,9 +3,9 @@ Helper functions such as data loading/modeling, randomization, or utility method
 """
 
 import pandas as pd
-from src.team import Team
-from src.player import Player, PlayerStats
-from typing import List
+from ..classes.team import Team
+from ..classes.player import Player
+from typing import List, Dict
 
 def create_test_teams_matchup(players_df: pd.DataFrame) -> List[Team]:
     """Create two test teams with balanced lineups from a pool of players.
@@ -56,7 +56,7 @@ def create_test_teams_matchup(players_df: pd.DataFrame) -> List[Team]:
     return teams
 
 
-def create_team_objects(players_df: pd.DataFrame) -> List[Team]:
+def create_team_objects(players_df: pd.DataFrame) -> Dict[str, Team]:
     """Create Team objects from processed player data, grouped by team.
     
     Args:
@@ -71,7 +71,7 @@ def create_team_objects(players_df: pd.DataFrame) -> List[Team]:
     for team_name, team_players in players_df.groupby('team'):
         lineup = create_player_objects(team_players)
         # Create Team object with lineup
-        teams[team_name] = Team(team_name, lineup)
+        teams[team_name] = Team(str(team_name), lineup)
         
     return teams
 

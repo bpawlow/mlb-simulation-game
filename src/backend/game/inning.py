@@ -6,8 +6,8 @@ half-inning of baseball, including tracking outs, managing baserunners, and
 calculating runs scored.
 """
 
-from src.hit_outcomes import HitType, OutType
-from src.base_running import BaseState
+from hit_outcomes import HitType, OutType
+from base_running import BaseState
 from random import random
 from typing import Literal
 

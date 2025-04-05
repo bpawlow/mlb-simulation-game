@@ -1,6 +1,6 @@
 from .base import Base, engine
-from ..team import Team
-from ..player import Player
+from ..classes.team import Team
+from ..classes.player import Player
 
 def init_db():
     # Create all tables
