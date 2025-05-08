@@ -2,7 +2,7 @@
 Logic for base running, including runner advancement and scoring.
 """
 
-from hit_outcomes import HitType, OutType
+from .hit_outcomes import HitType, OutType
 from random import random
 
 class BaseState:

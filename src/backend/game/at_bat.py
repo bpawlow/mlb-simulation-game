@@ -3,7 +3,7 @@ Logic to simulate the outcome of an at-bat, given player statistics.
 """
 
 import random
-from hit_outcomes import HitType, OutType 
+from .hit_outcomes import HitType, OutType 
 from ..classes.player import Player
 from typing import Dict
 

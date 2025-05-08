@@ -2,9 +2,14 @@ from .init_db import init_db
 from .session import Session
 from ..models.team_model import TeamModel
 from ..models.player_model import PlayerModel
+from ..models.user_model import UserModel
+from ..database.base import Base, engine
 import pandas as pd
 
 def setup_database():
+    
+    # Drop all existing tables
+    Base.metadata.drop_all(bind=engine)
     
     # Initialize database schema
     init_db()
@@ -12,13 +17,20 @@ def setup_database():
     # Create database session
     db = Session()
     
-    try:
-        # First clear existing data
-        db.query(PlayerModel).delete()
-        db.query(TeamModel).delete()
-        db.commit()
+    try:        
+        # Create default admin user if it doesn't exist
+        admin_user = db.query(UserModel).filter_by(username="admin_user").first()
+        if not admin_user:
+            admin_user = UserModel(
+                username="admin",
+                email="bradleypawlow99@gmail.com",
+                password_hash="admin1"
+            )
+            db.add(admin_user)
+            db.commit()
         
-        # Load your existing players CSV data
+        
+        # Load existing players CSV data
         players_df = pd.read_csv('data/players.csv')
         
         # Group players by team
@@ -34,7 +46,6 @@ def setup_database():
                     player_id=player_data['player_id'],
                     name=player_data['name'],
                     positions=player_data['position'],
-                    team_id=team.id,
                     year=player_data['year'],
                     age=player_data['player_age'],
                     # Stats

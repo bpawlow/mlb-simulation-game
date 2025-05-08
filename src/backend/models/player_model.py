@@ -1,19 +1,19 @@
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from typing import Optional
 from ..database.base import Base
-from .team_model import TeamModel
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..models import RosterModel, LineupModel
 
 class PlayerModel(Base):
     """Database model for player records."""
     __tablename__ = 'players'
     
-    # Use modern SQLAlchemy 2.0 style annotations
     id: Mapped[int] = mapped_column(primary_key=True)
     player_id: Mapped[str] = mapped_column(String(50), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     positions: Mapped[str] = mapped_column(String(200))
-    team_id: Mapped[Optional[int]] = mapped_column(ForeignKey('teams.id'))
     year: Mapped[int]
     age: Mapped[int]
     
@@ -34,12 +34,14 @@ class PlayerModel(Base):
     po: Mapped[int] = mapped_column(default=0)
     
     # Relationships
-    team: Mapped[TeamModel] = relationship(back_populates="players")
+    rosters: Mapped[list["RosterModel"]] = relationship(back_populates="player")
+    lineup_spots: Mapped[list["LineupModel"]] = relationship(back_populates="player")
     
-    # Add methods for serialization
+    # Method for serializing the model to a dictionary
     def to_dict(self) -> dict:
         """Convert model to dictionary."""
         return {
+            'id': self.id,
             'player_id': self.player_id,
             'name': self.name,
             'positions': self.positions,

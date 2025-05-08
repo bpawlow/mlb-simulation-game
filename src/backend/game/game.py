@@ -1,9 +1,9 @@
 """
 Simulate a game between two teams of the Teams class.
 """
-from inning import Inning
+from .inning import Inning
 from ..classes.team import Team
-from at_bat import simulate_at_bat
+from .at_bat import simulate_at_bat
 from typing import Literal
 
 class Game:
@@ -13,7 +13,13 @@ class Game:
         Args:
             visitor (Team): First team in the matchup (visiting team)
             home (Team): Second team in the matchup (home team)
+        Raises:
+            ValueError: If either team doesn't have exactly 9 players in their lineup
         """
+        
+        if len(visitor.lineup) != 9 or len(home.lineup) != 9:
+            raise ValueError("Both teams must have exactly 9 players in their lineup")
+        
         self.visitor = visitor
         self.home = home
         self.visitor_score = 0
@@ -54,7 +60,7 @@ class Game:
         lineup_idx = self.visitor_lineup_idx if half == "Top" else self.home_lineup_idx
         
         while self.current_inning.outs < 3:
-            batter = batting_team.lineup[lineup_idx]
+            batter = batting_team.lineup[lineup_idx][0]
             print(f"\n{batter.name} up to bat...")
             result = simulate_at_bat(batter)
             runs = self.current_inning.process_plate_appearance(result)
